@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<context:annotation-config />
+	<bean id="workProto" class="day04_02.Work" scope="prototype">	<!--  type이 prototype이므로 getBean할때마다 새로운 주소를 return 한다 -->
+		<property name="timeout" value="2000"/>
+		<property name="type" value="#{T(day04_02.Work$WorkType).SINGLE}"/>		<!-- 해당하는 workType에있는 SINGLE값을 넣는다 -->
+	</bean>
+	
+	<bean id="workRunner" class="day04_02.WorkRunner"/>
+	<bean id="workScheduler" class="day04_02.WorkScheduler">
+		<property name="workRunner" ref="workRunner"/>
+	</bean>
+</beans>

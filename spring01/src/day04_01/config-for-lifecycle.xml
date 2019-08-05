@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<context:annotation-config />
+	<bean class="day04_01.MyExtension"/>
+	<!-- 인터페이스에 의해 정해짐 -->
+	<bean class="day04_01.ConnPool1"/>
+	<bean class="day04_01.ConnPool2"/>
+	<!-- 태그에 의해서 정해짐 -->
+	<bean class="day04_01.ConnPool3" init-method="init" destroy-method="destroy"/>
+	<bean id="myBean" class="day04_01.MyBean" init-method="customInit" destroy-method="customDestroy">
+		<property name="property1" value="값1"/>
+	</bean>
+</beans>
