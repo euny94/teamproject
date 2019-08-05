@@ -11,7 +11,7 @@ public class WriteArticleServiceImpl implements WriteArticleService {
 	public void wrtie(NewArticleRequest newArticleReq) {
 		System.out.println("WriteArticleServiceImpl.write() 호출됨");
 		Article article = toArticle(newArticleReq);
-		articleDao.insert(article);
+		articleDao.insert(article); // profiler 걸림
 	}
 	
 	private Article toArticle(NewArticleRequest newArticleReq) {

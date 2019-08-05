@@ -12,7 +12,7 @@ public class ArticleCacheAdvice {
 	
 	public Article cache(ProceedingJoinPoint joinPoint) throws Throwable {
 		System.out.println("[ACA] 시작");
-		try {
+		try {	//joinporint는 실행되는 그 메소드 자체를 의미
 			Integer id = (Integer) joinPoint.getArgs()[0];
 			Article article = cache.get(id);
 			if (article != null) {

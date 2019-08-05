@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
+	<bean id = "cache" class="day05_01.aspect.ArticleCacheAdvice"/>	
+	<bean id = "profiler" class="day05_01.aspect.Profiler"/>
+	<bean id = "memberUpdateTraceAdvice" class="day05_01.aspect.UpdateMemberInfoTraceAdvice"/>
+	
+	<aop:config>
+		<aop:aspect id="traceAspect" ref="profiler">
+			<aop:pointcut expression="execution(public * day05_01.sample..*(..))" id="publicMethod"/>
+			<aop:around method="trace" pointcut-ref="publicMethod"/>
+		</aop:aspect>
+		<aop:aspect id="memberUpdateTraceAspect" ref="memberUpdateTraceAdvice">
+			<aop:after-returning pointcut="args(memberId,info)" method="traceReturn"/>
+		</aop:aspect>
+	</aop:config>
+	
+	<bean id = "writeArticleService" class="day05_01.sample.WriteArticleServiceImpl">
+		<constructor-arg>
+			<ref bean="articleDao"/>
+		</constructor-arg>
+	</bean>
+	<bean id = "memberService" class="day05_01.sample.MemberServiceImpl"/>
+	
+	<aop:config>
+		<aop:aspect id="cacheAspect" ref="cache">
+			<aop:around method="cache" pointcut="execution(public * *..ReadArticleService.*(..))"/>
+		</aop:aspect>
+	</aop:config>
+	<bean id="articleDao" class="day05_01.sample.MemoryArticleDao" />
+		<bean id="readArticleService" class="day05_01.sample.ReadArticleServiceImpl">
+			<property name="articleDao" ref="articleDao"/>
+		</bean>	
+</beans>
+	
+	<!-- aop config를 잡는데 걸어야하는게 cache
+	cache를 거는데 pointcut에  readarticleservice가 걸려 있으서 가 실행이 되어야함 그러니 readArticleServiceImpl
+	그래서 main에서는 readArticleServiceImple만 실행이되면 ArticleCacheAdvice가 실행이 됨
+	결국 ArticleCacheAdvice가 advice클래스!_! -->
